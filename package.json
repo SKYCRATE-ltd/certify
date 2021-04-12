@@ -1,0 +1,23 @@
+{
+  "name": "certify",
+  "version": "1.0.0",
+  "description": "mkcert wrapper for node",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SKYCRATE-ltd/certify.git"
+  },
+  "author": "Graham Robertson | SKYCRATE ltd",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/SKYCRATE-ltd/certify/issues"
+  },
+  "homepage": "https://github.com/SKYCRATE-ltd/certify#readme",
+  "dependencies": {
+    "termite": "github:SKYCRATE-ltd/termite"
+  }
+}
