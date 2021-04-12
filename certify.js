@@ -1,3 +1,5 @@
 #!/bin/env node
 
-const $ = process.argv.slice(2);
+import certify from "./index.js";
+
+certify(...process.argv.slice(2));

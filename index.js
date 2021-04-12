@@ -4,13 +4,12 @@ import {
 	copy,
 	mkdir,
 	is_sudo,
-	is_installed
+	is_installed,
+	parent_dir
 } from "computer";
-import {
-	dirname
-} from "path";
 import Program from "termite";
 
+const DIR = parent_dir(process.argv[1]);
 const PLATFORM = (process => {
 	let platform = process.platform;
 	let architecture = process.arch;
@@ -23,14 +22,14 @@ const PLATFORM = (process => {
 	
 	return `${platform}-${architecture}`;
 })(process);
-
-const MKCERT = `${dirname}/bin/${PLATFORM}`;
+const MKCERT = `${DIR}/bin/${PLATFORM}`;
 
 function setup(local = exec(`${MKCERT} -CAROOT`)) {
 	if (!exists(`${local}/rootCA.pem`)) {
 		mkdir(local); // ensure it exists...
-		copy(`${dirname}/etc/rootCA.pem`, `${local}`);
-		copy(`${dirname}/etc/rootCA-key.pem`, `${local}`);
+		copy(`${DIR}/etc/rootCA.pem`, `${local}`);
+		// TODO: can we hide this one forever?
+		copy(`${DIR}/etc/rootCA-key.pem`, `${local}`);
 	}
 	exec(`${MKCERT} -install`);
 }
