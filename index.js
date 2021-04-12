@@ -1,4 +1,10 @@
 import {
+	fileURLToPath
+} from 'url';
+import {
+	dirname
+} from 'path';
+import {
 	exists,
 	exec,
 	copy,
@@ -9,7 +15,7 @@ import {
 } from "computer";
 import Program from "termite";
 
-const DIR = parent_dir(process.argv[1]);
+const DIR = dirname(fileURLToPath(import.meta.url));
 const PLATFORM = (process => {
 	let platform = process.platform;
 	let architecture = process.arch;
