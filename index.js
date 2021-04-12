@@ -10,11 +10,11 @@ import {
 	copy,
 	mkdir,
 	is_sudo,
-	is_installed,
-	parent_dir
+	is_installed
 } from "computer";
 import Program from "termite";
 
+// This gives us our module's home directory.
 const DIR = dirname(fileURLToPath(import.meta.url));
 const PLATFORM = (process => {
 	let platform = process.platform;
