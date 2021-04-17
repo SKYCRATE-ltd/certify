@@ -29,27 +29,28 @@ const PLATFORM = (process => {
 	return `${platform}-${architecture}`;
 })(process);
 const MKCERT = `${DIR}/bin/${PLATFORM}`;
-
-function setup(local = exec(`${MKCERT} -CAROOT`)) {
-	if (!exists(`${local}/rootCA.pem`)) {
-		mkdir(local); // ensure it exists...
-		copy(`${DIR}/etc/rootCA.pem`, `${local}`);
-		// TODO: can we hide this one forever?
-		copy(`${DIR}/etc/rootCA-key.pem`, `${local}`);
-	}
-	exec(`${MKCERT} -install`);
-}
+const ROOT = exec(`${MKCERT} -CAROOT`);
 
 export default Program({
 	["@init"](cmd) {
-		if (cmd !== "install")
-			setup();
+		this.info(`ROOT: ${ROOT}`);
+		if (!["install", "setup"].includes(cmd))
+			this.pass('setup');
 	},
 	create(...domains) {
 		return exec(`cd etc/ && ${MKCERT} ${domains.join(' ')}`);
 	},
+	setup(local = ROOT) {
+		if (!exists(`${local}/rootCA.pem`)) {
+			mkdir(local); // ensure it exists...
+			copy(`${DIR}/etc/rootCA.pem`, `${local}`);
+			// TODO: can we hide this one forever?
+			copy(`${DIR}/etc/rootCA-key.pem`, `${local}`);
+		}
+		exec(`${MKCERT} -install`);
+	},
 	install() {
-		if (is_sudo())
+		if (!is_sudo())
 			return this.error('Must be sudo, baby.');
 
 		const libnss = [
@@ -68,6 +69,6 @@ export default Program({
 			}
 		}
 
-		setup();
+		this.pass('setup');
 	}
 });
